@@ -59,11 +59,11 @@
         // Check for the barcode in the URL query string (this will be called when the app redirects back)
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const barcode = urlParams.get('barcode');
+            const barcode = urlParams.get('ean');
 
             if (barcode) {
                 // Display the barcode data on the page
-                document.getElementById("queryText").textContent = "Barcode Data: " + barcode;
+                document.getElementById("queryText").textContent = "Barcode Data: " + ean;
 
                 // Wait for 2 seconds, then display the button again for the next scan
                 setTimeout(function() {
