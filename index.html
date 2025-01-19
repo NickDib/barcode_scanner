@@ -25,6 +25,7 @@
             width: 100%;
             max-width: 400px;
             display: none; /* Initially hidden */
+            margin-top: 30px;
         }
 
         .form-container h2 {
@@ -119,57 +120,45 @@
             return urlParams.get('ean');
         }
 
-        // Function to handle the callback and populate the form
+        // Function to handle the callback and display the form below the content
         window.onload = function() {
             const ean = getEANFromUrl(); // Get barcode data from the query string
             if (ean) {
-                // Clear existing content and display the form with barcode data
-                document.body.innerHTML = `
-                    <div id="formContainer" class="form-container">
-                        <h2>Enter Details</h2>
-                        <form id="barcodeForm">
-                            <input type="text" id="ean" name="ean" value="${ean}" readonly>
-                            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
-                            <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
-                            <input type="tel" id="mobile" name="mobile" placeholder="Mobile Number" required>
-                            <input type="submit" value="Submit">
-                        </form>
-                        <div id="successMessage" class="success-message">
+                // Display the form and populate the barcode field with the value from the query string
+                const formContainer = document.getElementById('formContainer');
+                formContainer.style.display = 'block'; // Show the form container
+
+                document.getElementById('ean').value = ean; // Set the EAN value in the form field
+            }
+        };
+
+        // Handle form submission via AJAX
+        const form = document.getElementById('barcodeForm');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('https://hook.us1.make.com/5elz1rxzs4k7gxwyfp9oujfv1pim8rbk', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    document.getElementById('formContainer').innerHTML = `
+                        <div class="success-message">
                             <span class="tick">&#x2714;</span>
                             <p>Deal Added OK</p>
                         </div>
-                    </div>
-                `;
-
-                // Handle form submission via AJAX
-                const form = document.getElementById('barcodeForm');
-                form.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-
-                    const formData = new FormData(form);
-
-                    try {
-                        const response = await fetch('https://hook.us1.make.com/5elz1rxzs4k7gxwyfp9oujfv1pim8rbk', {
-                            method: 'POST',
-                            body: formData
-                        });
-
-                        if (response.ok) {
-                            document.getElementById('formContainer').innerHTML = `
-                                <div class="success-message">
-                                    <span class="tick">&#x2714;</span>
-                                    <p>Deal Added OK</p>
-                                </div>
-                            `;
-                        } else {
-                            alert('Submission failed. Please try again.');
-                        }
-                    } catch (error) {
-                        alert('Error submitting the form.');
-                    }
-                });
+                    `;
+                } else {
+                    alert('Submission failed. Please try again.');
+                }
+            } catch (error) {
+                alert('Error submitting the form.');
             }
-        };
+        });
     </script>
 </body>
 </html>
