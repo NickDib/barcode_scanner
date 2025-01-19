@@ -13,6 +13,7 @@
             justify-content: center;
             align-items: center;
             background-color: #f0f0f0;
+            flex-direction: column;
         }
 
         /* Style the button */
@@ -30,16 +31,34 @@
         input[type="button"]:hover {
             background-color: #218838; /* Darker green on hover */
         }
+
+        /* Style the query string display */
+        #queryText {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <input type="button" onclick="scan();" value="Scan Barcode">
+    <div id="queryText"></div>
+
     <script>
         function scan() {
-            window.location.href = "pic2shop://scan?callback=http://yourwebsiteurl.com/index.html?barcode=ean";
+            // Set the new URL
+            const url = "https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
+            
+            // Display the query string text on the page
+            const queryText = new URLSearchParams(window.location.search).toString();
+            document.getElementById("queryText").textContent = "Query String: " + queryText;
+
+            // Redirect to the new URL
+            window.location.href = url;
         }
     </script>
 </body>
 </html>
+
 
 
