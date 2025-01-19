@@ -41,24 +41,32 @@
     </style>
 </head>
 <body>
-    <input type="button" onclick="scan();" value="Scan Barcode">
+    <input type="button" id="scanButton" onclick="scan();" value="Scan Barcode">
     <div id="queryText"></div>
 
     <script>
         function scan() {
-            // Set the new URL
-            const url = "https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
-            
+            // Hide the scan button for 5 seconds
+            document.getElementById("scanButton").style.display = "none";
+
             // Display the query string text on the page
             const queryText = new URLSearchParams(window.location.search).toString();
             document.getElementById("queryText").textContent = "Query String: " + queryText;
 
-            // Redirect to the new URL
-            window.location.href = url;
+            // Set the new URL
+            const url = "https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
+
+            // Redirect to the new URL after a short delay
+            setTimeout(function() {
+                // Re-display the scan button and redirect
+                document.getElementById("scanButton").style.display = "inline-block";
+                window.location.href = url;
+            }, 5000); // 5 seconds delay
         }
     </script>
 </body>
 </html>
+
 
 
 
