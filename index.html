@@ -36,9 +36,10 @@
     <input type="button" onclick="scan();" value="Scan Barcode">
     <script>
         function scan() {
-            window.location = "pic2shop://scan?callback=http://yourwebsiteurl.com/index.html?barcode=ean";
+            window.location.href = "pic2shop://scan?callback=http://yourwebsiteurl.com/index.html?barcode=ean";
         }
     </script>
 </body>
 </html>
+
 
