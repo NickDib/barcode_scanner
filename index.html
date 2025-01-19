@@ -15,8 +15,10 @@
             align-items: center;
             background-color: #f7f7f7;
             flex-direction: column;
+            padding: 20px; /* Padding for the whole page */
         }
 
+        /* Form Container */
         .form-container {
             background-color: #fff;
             padding: 30px;
@@ -26,6 +28,8 @@
             max-width: 400px;
             display: none; /* Initially hidden */
             margin-top: 30px;
+            box-sizing: border-box;
+            min-height: 400px; /* Ensure the form container has a minimum height */
         }
 
         .form-container h2 {
@@ -36,7 +40,7 @@
         /* Style for form inputs */
         input[type="text"], input[type="tel"] {
             width: 100%;
-            padding: 12px;
+            padding: 15px; /* Increased padding */
             margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -45,7 +49,7 @@
 
         input[type="submit"] {
             width: 100%;
-            padding: 12px;
+            padding: 15px; /* Increased padding */
             background-color: #007bff; /* Blue */
             color: white;
             border: none;
@@ -79,6 +83,7 @@
             border-radius: 10px;
             cursor: pointer;
             text-align: center;
+            box-sizing: border-box;
         }
 
         #scanButton:hover {
@@ -91,6 +96,7 @@
             font-size: 14px;
             margin-top: 20px;
         }
+
     </style>
 </head>
 <body>
