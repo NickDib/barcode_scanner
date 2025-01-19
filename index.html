@@ -84,6 +84,13 @@
         #scanButton:hover {
             background-color: #218838; /* Darker green on hover */
         }
+
+        /* Debugging Text Style */
+        #debug {
+            color: red;
+            font-size: 14px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -107,6 +114,9 @@
         </div>
     </div>
 
+    <!-- Debugging Text -->
+    <div id="debug"></div>
+
     <script>
         // Function to open the app for scanning
         function scan() {
@@ -123,12 +133,22 @@
         // Function to handle the callback and display the form below the content
         window.onload = function() {
             const ean = getEANFromUrl(); // Get barcode data from the query string
+            const debugDiv = document.getElementById('debug');
+
+            // Debugging: Log the URL and query string
+            debugDiv.innerHTML = `URL: ${window.location.href}<br>EAN from URL: ${ean || 'None'}`;
+
             if (ean) {
+                // Debugging: Show barcode value
+                debugDiv.innerHTML += `<br>Barcode Found: ${ean}`;
+
                 // Display the form and populate the barcode field with the value from the query string
                 const formContainer = document.getElementById('formContainer');
                 formContainer.style.display = 'block'; // Show the form container
-
                 document.getElementById('ean').value = ean; // Set the EAN value in the form field
+            } else {
+                // Debugging: No barcode found
+                debugDiv.innerHTML += '<br>No barcode data found in URL.';
             }
         };
 
@@ -138,6 +158,7 @@
             e.preventDefault();
 
             const formData = new FormData(form);
+            const debugDiv = document.getElementById('debug');
 
             try {
                 const response = await fetch('https://hook.us1.make.com/5elz1rxzs4k7gxwyfp9oujfv1pim8rbk', {
@@ -146,6 +167,7 @@
                 });
 
                 if (response.ok) {
+                    debugDiv.innerHTML += `<br>Submission Successful!`;
                     document.getElementById('formContainer').innerHTML = `
                         <div class="success-message">
                             <span class="tick">&#x2714;</span>
@@ -153,9 +175,11 @@
                         </div>
                     `;
                 } else {
+                    debugDiv.innerHTML += `<br>Submission failed. Please try again.`;
                     alert('Submission failed. Please try again.');
                 }
             } catch (error) {
+                debugDiv.innerHTML += `<br>Error: ${error.message}`;
                 alert('Error submitting the form.');
             }
         });
