@@ -32,7 +32,7 @@
             background-color: #218838; /* Darker green on hover */
         }
 
-        /* Style the query string display */
+        /* Style the barcode data display */
         #queryText {
             margin-top: 20px;
             font-size: 18px;
@@ -46,29 +46,36 @@
 
     <script>
         function scan() {
-            // Hide the scan button for 5 seconds
+            // Hide the scan button
             document.getElementById("scanButton").style.display = "none";
 
-            // Display the query string text on the page
-            const queryText = new URLSearchParams(window.location.search).toString();
-            document.getElementById("queryText").textContent = "Query String: " + queryText;
-
-            // Set the pic2shop URL
-            const pic2shopUrl = "pic2shop://scan?callback=https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
+            // Set the pic2shop URL to open the app
+            const pic2shopUrl = "pic2shop://scan?callback=https://nickdib.github.io/barcode_scanner/index.html";
 
             // Open the pic2shop app (or trigger URL scheme)
             window.location.href = pic2shopUrl;
-
-            // Re-display the button and redirect after 5 seconds
-            setTimeout(function() {
-                document.getElementById("scanButton").style.display = "inline-block";
-                // Redirect to the new URL (only after the button reappears)
-                window.location.href = "https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
-            }, 5000); // 5 seconds delay
         }
+
+        // Check for the barcode in the URL query string (this will be called when the app redirects back)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const barcode = urlParams.get('barcode');
+
+            if (barcode) {
+                // Display the barcode data on the page
+                document.getElementById("queryText").textContent = "Barcode Data: " + barcode;
+
+                // Wait for 2 seconds, then display the button again for the next scan
+                setTimeout(function() {
+                    document.getElementById("scanButton").style.display = "inline-block";
+                    document.getElementById("queryText").textContent = ""; // Clear the barcode data
+                }, 2000); // 2 seconds delay
+            }
+        };
     </script>
 </body>
 </html>
+
 
 
 
