@@ -53,19 +53,23 @@
             const queryText = new URLSearchParams(window.location.search).toString();
             document.getElementById("queryText").textContent = "Query String: " + queryText;
 
-            // Set the new URL
-            const url = "https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
+            // Set the pic2shop URL
+            const pic2shopUrl = "pic2shop://scan?callback=https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
 
-            // Redirect to the new URL after a short delay
+            // Open the pic2shop app (or trigger URL scheme)
+            window.location.href = pic2shopUrl;
+
+            // Re-display the button and redirect after 5 seconds
             setTimeout(function() {
-                // Re-display the scan button and redirect
                 document.getElementById("scanButton").style.display = "inline-block";
-                window.location.href = url;
+                // Redirect to the new URL (only after the button reappears)
+                window.location.href = "https://nickdib.github.io/barcode_scanner/index.html?barcode=ean";
             }, 5000); // 5 seconds delay
         }
     </script>
 </body>
 </html>
+
 
 
 
