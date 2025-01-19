@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner</title>
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.9/umd/index.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        video {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        #output {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Barcode Scanner</h1>
+    <video id="video" autoplay></video>
+    <div id="output">Scanning...</div>
+
+    <script>
+        (async function() {
+            const { BrowserBarcodeReader } = ZXing;
+            const codeReader = new BrowserBarcodeReader();
+            const videoElement = document.getElementById('video');
+            const outputElement = document.getElementById('output');
+
+            try {
+                // Request camera permissions explicitly
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+
+                const devices = await codeReader.listVideoInputDevices();
+
+                if (devices.length === 0) {
+                    outputElement.textContent = 'No camera devices found.';
+                    return;
+                }
+
+                // Use the first available camera
+                const firstDeviceId = devices[0].deviceId;
+                await codeReader.decodeFromVideoDevice(firstDeviceId, videoElement, (result, error) => {
+                    if (result) {
+                        const barcodeData = result.text;
+                        outputElement.textContent = `Decoded: ${barcodeData}`;
+
+                        // Call URL with barcode data
+                        const targetUrl = `https://example.com/barcode?data=${encodeURIComponent(barcodeData)}`;
+                        fetch(targetUrl)
+                            .then(response => {
+                                if (response.ok) {
+                                    console.log('Data sent successfully!');
+                                } else {
+                                    console.error('Error sending data:', response.status);
+                                }
+                            })
+                            .catch(err => console.error('Fetch error:', err));
+
+                        // Stop scanning after success
+                        codeReader.reset();
+                    } else if (error) {
+                        console.error('Error decoding:', error);
+                    }
+                });
+            } catch (err) {
+                console.error('Error initializing scanner:', err);
+                outputElement.textContent = 'Error initializing scanner. Please check your camera permissions.';
+            }
+        })();
+    </script>
+</body>
+</html>
